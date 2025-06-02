@@ -22,7 +22,7 @@ def reply(recipient_id, text):
     print("Gửi tin nhắn, status:", response.status_code)
     print("Phản hồi từ Facebook:", response.text)
 
-USER_ID = "ID_FACEBOOK_CỦA_M"  # Thay đúng ID này
+USER_ID = "24101809476121217"
 
 def send_reminders_from_txt():
     print("✅ Đang chạy send_reminders_from_txt()")
