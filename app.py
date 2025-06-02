@@ -24,7 +24,9 @@ def webhook():
             messaging = entry.get("messaging", [])
             for message_event in messaging:
                 sender_id = message_event["sender"]["id"]
-                if "message" in message_event:
+
+                # 👇 Chặn echo từ bot
+                if "message" in message_event and not message_event["message"].get("is_echo"):
                     message = message_event["message"]
                     message_text = message.get("text")
                     if message_text:
