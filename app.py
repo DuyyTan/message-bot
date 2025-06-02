@@ -1,5 +1,7 @@
 from flask import Flask, request
 import requests
+import os
+from scheduler import start_scheduler  # Import đúng chỗ
 
 app = Flask(__name__)
 
@@ -24,9 +26,7 @@ def webhook():
             messaging = entry.get("messaging", [])
             for message_event in messaging:
                 sender_id = message_event["sender"]["id"]
-
-                # 👇 Chặn echo từ bot
-                if "message" in message_event and not message_event["message"].get("is_echo"):
+                if "message" in message_event:
                     message = message_event["message"]
                     message_text = message.get("text")
                     if message_text:
@@ -42,10 +42,11 @@ def reply(recipient_id, text):
         "recipient": {"id": recipient_id},
         "message": {"text": text}
     }
-    
+
     response = requests.post(url, params=params, headers=headers, json=data)
     print("Gửi tin nhắn, status:", response.status_code)
     print("Phản hồi từ Facebook:", response.text)
 
-if __name__ == '__main__':
-    app.run(port=5000)
+if __name__ == "__main__":
+    start_scheduler()
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
