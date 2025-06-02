@@ -40,7 +40,7 @@ def send_reminders_from_txt():
 
 def run_schedule():
     # chỉnh giờ test lại gần hiện tại để khỏi đợi lâu
-    schedule.every().day.at("22:33").do(send_reminders_from_txt)
+    schedule.every().day.at("23:29").do(send_reminders_from_txt)
     while True:
         schedule.run_pending()
         time.sleep(60)
