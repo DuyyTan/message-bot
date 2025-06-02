@@ -6,7 +6,7 @@ app = Flask(__name__)
 VERIFY_TOKEN = "duyytan123"
 PAGE_ACCESS_TOKEN = "EAAKldfttpFUBOxomTE3qmIAULmIZCkx6Otnr0s9tR7b6rOdZBjRAYurt1vuFerGPhqezrM4UbyrZCp98EpAkz4hzyvRjNNywwalZAU1hggZAi4DXZCtoRyEdqKQnEKB2ZAYZCUiJNYHGs1nm8NCq3clZASg9kVuH3ndQhiCOCs7L73IAFEM6hfr2eQ1iXReWeDx6OFRGzHAZDZD"
 
-@app.route('/webhook', methods=['GET'])
+@app.route('/', methods=['GET'])
 def verify():
     token_sent = request.args.get("hub.verify_token")
     challenge = request.args.get("hub.challenge")
@@ -14,7 +14,7 @@ def verify():
         return challenge
     return 'Invalid verification token'
 
-@app.route('/webhook', methods=['POST'])
+@app.route('/', methods=['POST'])
 def webhook():
     data = request.get_json()
     print("Dữ liệu nhận được từ Facebook:", data)
