@@ -8,7 +8,11 @@ import threading
 app = Flask(__name__)
 
 VERIFY_TOKEN = "duyytan123"
+<<<<<<< HEAD
 PAGE_ACCESS_TOKEN = "EAAKldfttpFUBOwZCUVoObieGM61rdbGl2OSUNSXQPa7ptaqOyt2ZArkYmgnxWYdOxRPZAtuqUG5tO4OWc3tAfLXbZCkX59IAwoNQLdf0eey14ZCmxbsOwVJ4SHXPBP8AXutObYCMbOx4gwnQaZBwLqa7InH4qk7RleslgqKlStUVCQakXyHLzbe5fCt43apQBp0LAP7JHtv1o3T8ZCqOWWcXuLArTo4"
+=======
+PAGE_ACCESS_TOKEN = "EAAKldfttpFUBO2q8iL8gmOyzNaqi7qq4bPXHumzwckf33gYDUD22XyFeLxYOmkUbs9b9mQx0CectodFoqlFlyFQtZChZAneEkAthNW47CsubZADSuH3Jt6ieLmH8gAb4dl6xqDmqffldk6ttj5v7gPbLlu1ZAWB9r2bj6Jd0IaqJYjltVDDWujxRpsCsWTVWZBvRJ"
+>>>>>>> 195347c (hoan thien)
 # ======= HÀM GỬI TIN NHẮC ==========
 def reply(recipient_id, text):
     url = "https://graph.facebook.com/v17.0/me/messages"
@@ -39,9 +43,10 @@ def send_reminders_from_txt():
         print(f"❌ Lỗi khi gửi nhắc: {e}")
 
 def run_schedule():
-    # chỉnh giờ test lại gần hiện tại để khỏi đợi lâu
-    schedule.every().day.at("23:44").do(send_reminders_from_txt)
+    schedule.every().day.at("9:00").do(send_reminders_from_txt)
+    schedule.every().day.at("18:00").do(send_reminders_from_txt)
     while True:
+        print("⏳ Đang chờ tới giờ gửi...")
         schedule.run_pending()
         time.sleep(60)
 
