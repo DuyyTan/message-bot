@@ -8,7 +8,7 @@ import threading
 app = Flask(__name__)
 
 VERIFY_TOKEN = "duyytan123"
-PAGE_ACCESS_TOKEN = "EAAKldfttpFUBO06CG4ewlNG7Igm9sEW4foj94mADhsVHAIVR02JvZALYbhPiJFuIBRQPZA4pIuF3izFYrcnzkWkNbqo39GIUZCLm4bPny49drO wMapCN6G2NBjul1olzTbiQzI3MeZAeUkRZAUFpt4AMPJN90W68pT3LiDhJmfcY6F99JGo31gZC30AnpRz4T97AozsLNUe7hA5VXUIskNr0YzwTom"
+PAGE_ACCESS_TOKEN = "EAAKldfttpFUBOwZCUVoObieGM61rdbGl2OSUNSXQPa7ptaqOyt2ZArkYmgnxWYdOxRPZAtuqUG5tO4OWc3tAfLXbZCkX59IAwoNQLdf0eey14ZCmxbsOwVJ4SHXPBP8AXutObYCMbOx4gwnQaZBwLqa7InH4qk7RleslgqKlStUVCQakXyHLzbe5fCt43apQBp0LAP7JHtv1o3T8ZCqOWWcXuLArTo4"
 # ======= HÀM GỬI TIN NHẮC ==========
 def reply(recipient_id, text):
     url = "https://graph.facebook.com/v17.0/me/messages"
