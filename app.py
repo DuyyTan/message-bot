@@ -78,5 +78,5 @@ def webhook():
 
 # ========== CHẠY APP ============
 if __name__ == "__main__":
-    start_scheduler()
+    threading.Thread(target=start_scheduler, daemon=True).start()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
