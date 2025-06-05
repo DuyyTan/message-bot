@@ -39,13 +39,11 @@ def send_reminders_from_txt():
     except Exception as e:
         print(f"❌ Lỗi khi gửi nhắc: {e}")
 
-def start_scheduler():
-    schedule.every().day.at("9:00").do(send_reminders_from_txt)
-    schedule.every().day.at("18:00").do(send_reminders_from_txt)
+def run_schedule():
+    print("✅ Scheduler khởi động")
     schedule.every(1).minutes.do(send_reminders_from_txt)
-
     while True:
-        print("⏳ Đang chờ tới giờ gửi...")
+        print("⏳ Kiểm tra lịch...")
         schedule.run_pending()
         time.sleep(60)
 
@@ -78,12 +76,14 @@ def webhook():
                         reply(sender_id, f"Bot nhận được: {message_text}")
     return "ok", 200
 
-@app.before_first_request
-def activate_scheduler():
-    print("🚀 Khởi động scheduler từ Flask lifecycle")
-    threading.Thread(target=start_scheduler, daemon=True).start()
-
 # ========== CHẠY APP ============
 if __name__ == "__main__":
-    send_reminders_from_txt()  # test lúc khởi động server
+    print("🚀 Khởi động app và scheduler...")
+
+    # Tạo thread chạy schedule nền
+    scheduler_thread = threading.Thread(target=start_scheduler)
+    scheduler_thread.daemon = True  # đảm bảo thread không cản trở shutdown
+    scheduler_thread.start()
+
+    # Khởi chạy app Flask
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
