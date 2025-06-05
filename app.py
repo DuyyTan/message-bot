@@ -42,6 +42,7 @@ def send_reminders_from_txt():
 def run_schedule():
     schedule.every().day.at("9:00").do(send_reminders_from_txt)
     schedule.every().day.at("18:00").do(send_reminders_from_txt)
+    schedule.every(1).minutes.do(send_reminders_from_txt)
     while True:
         print("⏳ Đang chờ tới giờ gửi...")
         schedule.run_pending()
