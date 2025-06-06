@@ -7,9 +7,10 @@ import threading
 
 app = Flask(__name__)
 
-VERIFY_TOKEN = "duyytan123"
+VERIFY_TOKEN = os.environ.get("VERIFY_TOKEN")
+PAGE_ACCESS_TOKEN = os.environ.get("PAGE_ACCESS_TOKEN")
+USER_ID = os.environ.get("USER_ID")
 
-PAGE_ACCESS_TOKEN = "EAAKldfttpFUBO2q8iL8gmOyzNaqi7qq4bPXHumzwckf33gYDUD22XyFeLxYOmkUbs9b9mQx0CectodFoqlFlyFQtZChZAneEkAthNW47CsubZADSuH3Jt6ieLmH8gAb4dl6xqDmqffldk6ttj5v7gPbLlu1ZAWB9r2bj6Jd0IaqJYjltVDDWujxRpsCsWTVWZBvRJ"
 # ======= HÀM GỬI TIN NHẮC ==========
 def reply(recipient_id, text):
     url = "https://graph.facebook.com/v17.0/me/messages"
@@ -23,8 +24,6 @@ def reply(recipient_id, text):
     print("Gửi tin nhắn, status:", response.status_code)
     print("Phản hồi từ Facebook:", response.text)
 
-USER_ID = "24101809476121217"
-
 def send_reminders_from_txt():
     print("✅ Đang chạy send_reminders_from_txt()")
     try:
@@ -34,17 +33,15 @@ def send_reminders_from_txt():
         for line in lines:
             line = line.strip()
             if line:
-                print(f"👉 Đang gửi: {line}")  # dòng này log rõ ràng nè
+                print(f"👉 Đang gửi: {line}")
                 reply(USER_ID, f"📌 Nhắc nè: {line}")
     except Exception as e:
         print(f"❌ Lỗi khi gửi nhắc: {e}")
 
 def run_schedule():
-    print("✅ Scheduler khởi động")
-    schedule.every().day.at("02:00").do(send_reminders_from_txt)
-    schedule.every().day.at("11:00").do(send_reminders_from_txt)
+    schedule.every(2).minutes.do(send_reminders_from_txt)
     while True:
-        print("⏳ Kiểm tra lịch...")
+        print("⏳ Đang chờ tới giờ gửi...")
         schedule.run_pending()
         time.sleep(60)
 
@@ -79,11 +76,5 @@ def webhook():
 
 # ========== CHẠY APP ============
 if __name__ == "__main__":
-    print("🚀 Khởi động app và scheduler...")
-
-    # Sửa chỗ này
-    scheduler_thread = threading.Thread(target=run_schedule)
-    scheduler_thread.daemon = True
-    scheduler_thread.start()
-
+    start_scheduler()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
