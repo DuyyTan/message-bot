@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: message-bot
+    env: python
+    buildCommand: ""
+    startCommand: python app.py
+    envVars:
+      - key: PAGE_ACCESS_TOKEN
+        value: EAAKldfttpFUBO2q8iL8gmOyzNaqi7qq4bPXHumzwckf33gYDUD22XyFeLxYOmkUbs9b9mQx0CectodFoqlFlyFQtZChZAneEkAthNW47CsubZADSuH3Jt6ieLmH8gAb4dl6xqDmqffldk6ttj5v7gPbLlu1ZAWB9r2bj6Jd0IaqJYjltVDDWujxRpsCsWTVWZBvRJ
+      - key: VERIFY_TOKEN
+        value: duyytan123
+      - key: USER_ID
+        value: 24101809476121217
