@@ -41,8 +41,8 @@ def send_reminders_from_txt():
 
 def run_schedule():
     print("✅ Scheduler khởi động")
-    schedule.every().day.at("09:00").do(send_reminders_from_txt)
-    schedule.every().day.at("18:00").do(send_reminders_from_txt)
+    schedule.every().day.at("02:00").do(send_reminders_from_txt)
+    schedule.every().day.at("11:00").do(send_reminders_from_txt)
     while True:
         print("⏳ Kiểm tra lịch...")
         schedule.run_pending()
@@ -81,10 +81,9 @@ def webhook():
 if __name__ == "__main__":
     print("🚀 Khởi động app và scheduler...")
 
-    # Tạo thread chạy schedule nền
-    scheduler_thread = threading.Thread(target=start_scheduler)
-    scheduler_thread.daemon = True  # đảm bảo thread không cản trở shutdown
+    # Sửa chỗ này
+    scheduler_thread = threading.Thread(target=run_schedule)
+    scheduler_thread.daemon = True
     scheduler_thread.start()
 
-    # Khởi chạy app Flask
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
