@@ -64,9 +64,13 @@ def start_scheduler():
 def verify():
     token_sent = request.args.get("hub.verify_token")
     challenge = request.args.get("hub.challenge")
-    if token_sent == VERIFY_TOKEN:
-        return challenge
-    return 'Invalid verification token'
+
+    if token_sent and challenge:
+        if token_sent == VERIFY_TOKEN:
+            return challenge
+        else:
+            return "Sai verify token", 403
+    return "Bot đang chạy ngon lành!", 200
 
 @app.route('/', methods=['POST'])
 def webhook():
