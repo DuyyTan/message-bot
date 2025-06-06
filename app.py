@@ -7,7 +7,7 @@ import os
 
 app = Flask(__name__)
 
-VERIFY_TOKEN = duyytan123
+VERIFY_TOKEN = "duyytan123"
 PAGE_ACCESS_TOKEN = EAAKldfttpFUBO2q8iL8gmOyzNaqi7qq4bPXHumzwckf33gYDUD22XyFeLxYOmkUbs9b9mQx0CectodFoqlFlyFQtZChZAneEkAthNW47CsubZADSuH3Jt6ieLmH8gAb4dl6xqDmqffldk6ttj5v7gPbLlu1ZAWB9r2bj6Jd0IaqJYjltVDDWujxRpsCsWTVWZBvRJ
 USER_ID = 24101809476121217
 
