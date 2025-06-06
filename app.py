@@ -7,16 +7,12 @@ import threading
 
 app = Flask(__name__)
 
-# Lấy token và ID từ biến môi trường
 VERIFY_TOKEN = os.environ.get("VERIFY_TOKEN")
 PAGE_ACCESS_TOKEN = os.environ.get("PAGE_ACCESS_TOKEN")
 USER_ID = os.environ.get("USER_ID")
 
 # ======= HÀM GỬI TIN NHẮC ==========
 def reply(recipient_id, text):
-    if not PAGE_ACCESS_TOKEN:
-        print("❌ Thiếu PAGE_ACCESS_TOKEN")
-        return
     url = "https://graph.facebook.com/v17.0/me/messages"
     params = {"access_token": PAGE_ACCESS_TOKEN}
     headers = {"Content-Type": "application/json"}
@@ -24,18 +20,12 @@ def reply(recipient_id, text):
         "recipient": {"id": recipient_id},
         "message": {"text": text}
     }
-    try:
-        response = requests.post(url, params=params, headers=headers, json=data)
-        print("✅ Gửi tin nhắn, status:", response.status_code)
-        print("📨 Phản hồi từ Facebook:", response.text)
-    except Exception as e:
-        print("❌ Lỗi khi gửi request:", e)
+    response = requests.post(url, params=params, headers=headers, json=data)
+    print("Gửi tin nhắn, status:", response.status_code)
+    print("Phản hồi từ Facebook:", response.text)
 
 def send_reminders_from_txt():
-    print("🔁 Đang chạy send_reminders_from_txt()")
-    if not USER_ID:
-        print("❌ USER_ID chưa được set.")
-        return
+    print("✅ Đang chạy send_reminders_from_txt()")
     try:
         with open("reminders.txt", "r", encoding="utf-8") as f:
             lines = f.readlines()
@@ -43,39 +33,45 @@ def send_reminders_from_txt():
         for line in lines:
             line = line.strip()
             if line:
-                print(f"📌 Đang gửi: {line}")
+                print(f"👉 Đang gửi: {line}")
                 reply(USER_ID, f"📌 Nhắc nè: {line}")
     except Exception as e:
-        print(f"❌ Lỗi khi đọc/gửi từ reminders.txt: {e}")
+        print(f"❌ Lỗi khi gửi nhắc: {e}")
 
-# ====== LỊCH GỬI NHẮC ======
+# ======= HÀM GIỮ APP KHÔNG SLEEP ==========
+def keep_awake():
+    try:
+        print("🔄 Đang gọi lại chính app để giữ cho app thức...")
+        url = "https://message-bot-gh20.onrender.com"  # URL app của Duy trên Render
+        requests.get(url)
+    except Exception as e:
+        print(f"❌ Lỗi khi gọi chính app: {e}")
+
 def run_schedule():
     schedule.every(2).minutes.do(send_reminders_from_txt)
+    schedule.every(10).minutes.do(keep_awake)  # 👈 Gọi lại app mỗi 10 phút
+
     while True:
-        print("⏳ Đợi tới lịch gửi...")
+        print("⏳ Đang chờ tới giờ gửi...")
         schedule.run_pending()
         time.sleep(60)
 
 def start_scheduler():
-    thread = threading.Thread(target=run_schedule)
-    thread.daemon = True
-    thread.start()
+    threading.Thread(target=run_schedule).start()
 
-# ========== FB WEBHOOK ============
+# ========== WEBHOOK FB ============
 @app.route('/', methods=['GET'])
 def verify():
     token_sent = request.args.get("hub.verify_token")
     challenge = request.args.get("hub.challenge")
     if token_sent == VERIFY_TOKEN:
-        print("✅ Xác minh webhook thành công.")
         return challenge
-    print("❌ Sai VERIFY_TOKEN")
-    return 'Invalid verification token', 403
+    return 'Invalid verification token'
 
 @app.route('/', methods=['POST'])
 def webhook():
     data = request.get_json()
-    print("📩 Dữ liệu từ Facebook:", data)
+    print("Dữ liệu nhận được từ Facebook:", data)
 
     if data.get("object") == "page":
         for entry in data.get("entry", []):
@@ -83,13 +79,13 @@ def webhook():
             for message_event in messaging:
                 sender_id = message_event["sender"]["id"]
                 if "message" in message_event:
-                    message_text = message_event["message"].get("text")
+                    message = message_event["message"]
+                    message_text = message.get("text")
                     if message_text:
-                        reply(sender_id, f"🤖 Bot nhận được: {message_text}")
+                        reply(sender_id, f"Bot nhận được: {message_text}")
     return "ok", 200
 
 # ========== CHẠY APP ============
 if __name__ == "__main__":
-    print("🚀 Đang khởi chạy bot ở môi trường:", os.environ.get("FLASK_ENV", "production"))
     start_scheduler()
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
