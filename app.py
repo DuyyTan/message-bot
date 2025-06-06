@@ -34,8 +34,11 @@ def send_message(recipient_id, message_text):
     response = requests.post(url, headers=headers, params=params, json=data)
     print("Đã gửi:", message_text, "| Phản hồi:", response.text)
 
-@app.route('/', methods=['GET'])
+@app.route('/', methods=['GET', 'HEAD'])
 def verify():
+    if request.method == 'HEAD':
+        return "✅ OK", 200
+
     token_sent = request.args.get("hub.verify_token")
     challenge = request.args.get("hub.challenge")
     if token_sent == VERIFY_TOKEN:
