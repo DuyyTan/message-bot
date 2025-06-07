@@ -62,8 +62,9 @@ def webhook():
 
 def run_schedule():
     # Cập nhật lại lịch 9h sáng và 6h tối
-    schedule.every().day.at("09:00").do(send_reminders_from_txt)
-    schedule.every().day.at("18:00").do(send_reminders_from_txt)
+    schedule.every().day.at("02:00").do(send_reminders_from_txt)
+    schedule.every().day.at("7:00").do(send_reminders_from_txt)
+    schedule.every().day.at("11:00").do(send_reminders_from_txt)
     while True:
         schedule.run_pending()
         time.sleep(60)
