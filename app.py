@@ -62,7 +62,7 @@ def webhook():
 
 @app.route("/ping")
 def ping():
-    return "pong"
+    return "", 204
     
 def run_schedule():
     # Cập nhật lại lịch 9h sáng và 6h tối
