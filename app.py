@@ -60,6 +60,10 @@ def webhook():
                     send_message(sender_id, reply)
     return "ok", 200
 
+@app.route("/ping")
+def ping():
+    return "pong"
+    
 def run_schedule():
     # Cập nhật lại lịch 9h sáng và 6h tối
     schedule.every().day.at("08:30").do(send_reminders_from_txt)
